@@ -1,0 +1,28 @@
+{
+  "/api/users": "Get all users",
+  "/api/user/:userId": "Get|Update|Delete a single user",
+  "/api/user/profile": "Get|Create|Update current user profile",
+  "/api/profile/all": "Get all profiles",
+  "api/profile/delete": "Delete user profile",
+  "/api/profile/by/handle/:handle": "Get Profile by handle",
+  "/api/profile/user/userId": "Get Profile by userId",
+  "/api/profile/add/experience": "Add Experience to Profile",
+  "/api/profile/delete/experience/:expId": "Delete Experience from Profile",
+  "/api/profile/add/education": "Add Education to Profile",
+  "api/profile/delete/education/:eduId": "Delete Experience from Profile",
+  "/auth/signin": "Sign In",
+  "/auth/signup": "Register",
+  "/auth/signout": "Sign Out",
+  "/auth/current": " Current user",
+  "/api/posts/by/:userId": "Get all posts by user",
+  "/api/posts": "Get all posts",
+  "/api/post/new": "Create new post",
+  "/api/post/:postId": "Get|Update|Delete post by postId",
+  "/api/posts/like/:postId": "Like a post",
+  "/api/posts/unlike/:postId": "Unlike a post",
+  "/api/posts/comment/:postId": "Add comments to post",
+  "/api/posts/comment/:postId/:commentId": "Delete comments from post",
+  "/secret/:userId": "Test the use of userId",
+  "/secretpost/:postId": "Test the use of postId"
+
+}

@@ -1,0 +1,39 @@
+{
+  "name": "reonyouths",
+  "version": "1.0.0",
+  "description": "Reon Youths Evangelistic Ministry",
+  "main": "index.js",
+  "author": "Demola Adebayo",
+  "scripts": {
+    "server": "nodemon server.js",
+    "client-install": "yarn install --prefix client",
+    "client": "yarn start --prefix client",
+    "dev": "concurrently \"yarn run server\" \"yarn run client\""
+  },
+  "keywords": [
+    "node",
+    "api"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.15",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.4",
+    "uuid": "^8.1.0"
+  },
+  "devDependencies": {
+    "concurrently": "^5.2.0",
+    "crypto": "^1.0.1",
+    "express-jwt": "^5.3.3",
+    "express-validator": "^6.5.0",
+    "formidable": "^1.2.2",
+    "validator": "^13.0.0"
+  }
+}
