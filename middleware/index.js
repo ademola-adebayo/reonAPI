@@ -51,13 +51,11 @@ const requireSignin = expressJwt({
 });
 
 const hasAuthorization = (req, res, next) => {
-  const errors = {};
   const authorized =
     req.profile && req.user && req.profile._id === req.user._id;
   if (!authorized) {
-    errors.notAuthorized =
-      'User is not authorized to perform this action. Access denied.';
-    return res.status(403).json(errors);
+    return res.status(403).json({error:'User is not authorized to perform this action. Access denied.',
+  msg: 'Not authorized.'});
   }
   next();
 };

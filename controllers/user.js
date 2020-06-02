@@ -9,7 +9,6 @@ const User = require('../models/User');
 //Load Profile Model
 const Profile = require('../models/Profile');
 
-
 const getUsers = (req, res) => {
   const users = User.find()
     .select('_id name email updated created')
@@ -26,7 +25,6 @@ const getUser = (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const errors = {};
   const userFields = {};
   if (req.body.name) userFields.name = req.body.name;
   if (req.body.email) userFields.email = req.body.email;
@@ -38,19 +36,21 @@ const updateUser = async (req, res) => {
       res.status(201).json({ user, msg: 'User successfully updated.' });
     })
     .catch((err) => {
-      errors.noupdate = 'Can not update the user at this time.'
-      return res.status(404).json(errors)
+      return res
+        .status(404)
+        .json({ error: 'Can not update the user at this time.' });
     });
 };
 
 const deleteUser = (req, res) => {
   let user = req.profile;
   console.log('USER: ', user);
-  const errors = {};
   user.remove((err, user) => {
     if (err) {
-      errors.nonAuthorize = 'Not authorize to delete a resourse.';
-      return res.status(400).json(errors);
+      return res.status(400).json({
+        error: 'Not authorize to delete a resourse.',
+        msg: 'Not Authorize.'
+      });
     }
 
     // user.hashed_password = undefined;
@@ -60,11 +60,11 @@ const deleteUser = (req, res) => {
 };
 
 const userById = (req, res, next, id) => {
-  const errors = {};
   User.findById(id).exec((err, user) => {
     if (err || !user) {
-      errors.nouser = 'User not found';
-      return res.status(400).json(errors);
+      return res
+        .status(400)
+        .json({ error: 'User not found', msg: 'No user found.' });
     }
 
     // adds profile object in req with user info
@@ -74,12 +74,10 @@ const userById = (req, res, next, id) => {
   });
 };
 
-
-
 module.exports = {
   getUsers,
   userById,
   getUser,
   updateUser,
-  deleteUser,
+  deleteUser
 };

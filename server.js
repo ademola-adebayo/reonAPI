@@ -31,7 +31,7 @@ app.use(bodyParser.json());
 if (process.env.NODE_ENV == 'development') {
   app.use(
     cors({
-      origin: `${Host}:${port}`,
+      origin: `${Host}:${port}`
     })
   );
 }
@@ -42,7 +42,6 @@ const userRoutes = require('./routes/api/user');
 const postRoutes = require('./routes/api/post');
 const profileRoutes = require('./routes/api/profile');
 
-
 app.get('/ping', (req, res) => {
   res.send('ping pong');
 });
@@ -52,7 +51,7 @@ app.get('/api', (req, res) => {
   fs.readFile('docs/apiDocs.json', (err, data) => {
     if (err) {
       res.status(400).json({
-        error: err,
+        error: err
       });
     }
 

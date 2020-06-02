@@ -8,29 +8,29 @@ const UserSchema = new Schema({
     type: String,
     required: true,
     trim: true,
-    maxlength: 32,
+    maxlength: 32
   },
   email: {
     type: String,
     required: true,
     trim: true,
     unique: true,
-    lowercase: true,
+    lowercase: true
   },
   hashed_password: {
     type: String,
-    required: true,
+    required: true
   },
   salt: String,
   created: {
     type: Date,
-    default: Date.now,
+    default: Date.now
   },
   role: {
-    type: Number,
-    default: 'subscriber',
+    type: String,
+    default: 'subscriber'
   },
-  updated: { type: Date, default: Date.now },
+  updated: { type: Date, default: Date.now }
 });
 
 // virtual field
@@ -64,7 +64,7 @@ UserSchema.methods = {
     } catch (err) {
       return '';
     }
-  },
+  }
 };
 
 module.exports = User = mongoose.model('User', UserSchema);

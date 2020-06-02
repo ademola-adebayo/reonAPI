@@ -112,12 +112,6 @@ const postsByUser = (req, res) => {
 };
 
 const createComment = (req, res) => {
-  const { errors, isValid } = validatePostInput(req.body);
-
-  //Check Validation
-  if (!isValid) {
-    return res.status(400).json(errors);
-  }
   Post.findById(req.params.postId)
     .then((post) => {
       const newComment = {
@@ -146,7 +140,7 @@ const deleteComment = (req, res) => {
       ) {
         return res
           .status(404)
-          .json({ commentnotexists: 'Comment does not exist' });
+          .json({ commentnotexist: 'Comment does not exist' });
       }
 
       //Get remove index
@@ -186,7 +180,7 @@ const deletePost = (req, res) => {
         if (post.user.toString() !== req.user.id) {
           return res
             .status(401)
-            .json({ notauthorized: ' user not authorized.' });
+            .json({ notauthorized: 'user not authorized.' });
         }
 
         //Delete
@@ -201,7 +195,6 @@ const deletePost = (req, res) => {
 };
 
 const updatePost = async (req, res) => {
-  const errors = {};
   const updateFields = {};
   if (req.body.title) updateFields.title = req.body.title;
   if (req.body.text) updateFields.text = req.body.text;
@@ -213,8 +206,9 @@ const updatePost = async (req, res) => {
       res.status(201).json({ msg: 'Post successfully updated.' });
     })
     .catch((err) => {
-      errors.noupdate = 'Can not update the post at this time.';
-      return res.status(404).json(errors);
+      return res.status(404).json({
+        noupdate: 'Can not update the post at this time.'
+      });
     });
 };
 
@@ -240,12 +234,21 @@ const createPost = (req, res) => {
   //   });
   // });
 
-  newPost.save().then((result) => {
-    res.status(200).json({
-      post: result,
+
+  newPost.save((err, post) => {
+    if (err) {
+      return res
+        .status(401)
+        .json({ error: 'Error saving post in the database.' });
+    }
+
+    return res.status(200).json({
+      post,
+      msg: 'Post saved successfully.'
     });
   });
 };
+
 
 
 module.exports = {

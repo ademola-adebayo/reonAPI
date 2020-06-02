@@ -1,6 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
+const {
+  createProfileValidator,
+  addEducationValidator,
+  addExperienceValidator
+} = require('../../validator/auth');
+
+const { runValidation } = require('../../validator');
+
 //import the controllers
 const {
   getProfiles,
@@ -13,6 +21,7 @@ const {
   deleteProfile,
   getCurrentUserProfile,
   createAndUpdateUserProfile,
+  createAndUpdateUserProfile2
 } = require('../../controllers/profile');
 
 const { authenticateUser, requireSignin } = require('../../middleware');
@@ -35,12 +44,16 @@ router.route('/profile/all').get(authenticateUser, getProfiles);
 // @route    POST api/profile/add/experience
 // @desc     Add experience to profile
 // @access   Private
-router.route('/profile/add/experience').post(authenticateUser, addExperience);
+router
+  .route('/profile/add/experience')
+  .post(authenticateUser, addExperienceValidator, runValidation, addExperience);
 
 // @route    POST api/profile/add/education
 // @desc     Add experience to profile
 // @access   Private
-router.route('/profile/add/education').post(authenticateUser, addEducation);
+router
+  .route('/profile/add/education')
+  .post(authenticateUser, addEducationValidator, runValidation, addEducation);
 
 // @route    DELETE api/profile/delete/experience/:exp_id
 // @desc     Delete experience from profile
@@ -49,7 +62,6 @@ router
   .route('/profile/delete/experience/:expId')
   .delete(authenticateUser, deleteExperience);
 
-
 // @route    DELETE api/profile/delete/education/:eduId
 // @desc     Delete education from profile
 // @access   Private
@@ -57,20 +69,26 @@ router
   .route('/profile/delete/education/:eduId')
   .delete(authenticateUser, deleteEducation);
 
-
 // @route    DELETE api/profile/delete
 // @desc     Delete user and profile
 // @access   Private
-router
-  .route('/profile/delete')
-  .delete(authenticateUser, deleteProfile);
+router.route('/profile/delete').delete(authenticateUser, deleteProfile);
 
-// @route    GET api/user/profile
+// @route    GET api/user/profile/me
 // @desc     Get current users profile
+// @access   Private
+router.route('/user/profile/me').get(authenticateUser, getCurrentUserProfile);
+
+// @route    POST api/user/profile
+// @desc     Create or update user profile
 // @access   Private
 router
   .route('/user/profile')
-  .get(authenticateUser, getCurrentUserProfile)
-  .post(authenticateUser, createAndUpdateUserProfile);
+  .post(
+    authenticateUser,
+    createProfileValidator,
+    runValidation,
+    createAndUpdateUserProfile
+  );
 
 module.exports = router;

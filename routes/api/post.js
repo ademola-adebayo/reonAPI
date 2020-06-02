@@ -1,7 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-const { createPostValidator, validatorResult } = require('../../validator');
+const { createPostValidator } = require('../../validator/auth');
+
+const { runValidation } = require('../../validator/index');
+
+
 const {
   requireSignin,
   authenticateUser,
@@ -34,7 +38,7 @@ router.route('/posts').get(authenticateUser, getPosts);
 // @access Private
 router
   .route('/post/new')
-  .post(authenticateUser, createPostValidator, validatorResult, createPost);
+  .post(authenticateUser, createPostValidator, runValidation, createPost);
 
 // @route  POST api/posts/like/:postId
 // @desc   Like posts
