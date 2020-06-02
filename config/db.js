@@ -8,17 +8,20 @@ const options = {
   useCreateIndex: true,
 };
 
+
+
 const connectDBWithRetry = async () => {
   try {
-    console.log('MongoDB is connected'.info);
     await mongoose.connect(process.env.MONGO_URI, options);
+    console.log(`MongoDB is connected`);
   } catch (err) {
     mongoose.connection.on('error', (err) => {
       console.log(
-        `MongoDB connection unsuccessful, retry after 5 seconds. ${err}`
+        `MongoDB connection unsuccessful, retry after 5 seconds. ${err.message}`
       );
     });
     return setTimeout(connectDBWithRetry, 5000);
+    process.exit(1)
   }
 };
 
