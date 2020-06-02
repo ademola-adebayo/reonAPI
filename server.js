@@ -15,19 +15,9 @@ const port = process.env.PORT || 8080;
 const Host = require('./config/keys').DB_HOST;
 //db
 //connect to mongoose options
-const options = {
-  useNewUrlParser: true,
-  useFindAndModify: false,
-  useUnifiedTopology: true,
-  useCreateIndex: true,
-};
-mongoose
-  .connect(process.env.MONGO_URI, options)
-  .then(() => console.log(`DB Connected`));
+const connectDBWithRetry = require('./config/db');
 
-mongoose.connection.on('error', (err) => {
-  console.log(`DB Connection error: ${err.message}`);
-});
+connectDBWithRetry();
 
 // middleware
 
@@ -47,12 +37,13 @@ if (process.env.NODE_ENV == 'development') {
 }
 
 //bring in routes
-const authRoutes = require('./routes/auth');
+const authRoutes = require('./routes/api/auth');
 const userRoutes = require('./routes/api/user');
 const postRoutes = require('./routes/api/post');
 const profileRoutes = require('./routes/api/profile');
 
-app.get('/', (req, res) => {
+
+app.get('/ping', (req, res) => {
   res.send('ping pong');
 });
 
@@ -74,12 +65,22 @@ app.get('/api', (req, res) => {
 app.use('/api', postRoutes);
 app.use('/api', profileRoutes);
 app.use('/api', userRoutes);
-app.use('/auth', authRoutes);
+app.use('/api', authRoutes);
 app.use(function (err, req, res, next) {
   if (err.name === 'UnauthorizedError') {
     res.status(401).json({ error: 'Unauthorized!' });
   }
 });
+
+// Serve static assets in production
+if (process.env.NODE_ENV === 'production') {
+  // Set static folder
+  app.use(express.static('client/build'));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
 
 app.listen(port, () => {
   console.log(`A Node Js API is listening on port: ${port}`);
